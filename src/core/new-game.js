@@ -42,7 +42,7 @@ export const NG = {
     GameEnd.removeAdditionalEnd = true;
     GameEnd.additionalEnd = 15;
     // Without the delay, this causes the saving (and its notification) to occur during the credits rollback
-    setTimeout(() => GameStorage.save(), 10000);
+    GameStorage.save(true);
   },
 
   // Reset the game, but carry over some post-completion stats. We also call this when starting a speedrun, so make sure
@@ -50,7 +50,7 @@ export const NG = {
   restartWithCarryover() {
     const backUpOptions = JSON.stringify(player.options);
     // This can't be JSONed as it contains sets
-    const secretUnlocks = player.secretUnlocks;
+    const secretUnlocks = structuredClone(player.secretUnlocks);
     const secretAchievements = JSON.stringify(player.secretAchievementBits);
     // We don't backup the whole player.reality.automator object because it contains "state",
     // which could lead to some edge cases where it starts when it shouldn't (ie before it's unlocked)
@@ -86,12 +86,12 @@ export const NG = {
     player.speedrun.isUnlocked = hasSpeedrun;
     Themes.find(Theme.currentName()).set();
     player.timestudy.presets = JSON.parse(presets);
-    JSON.parse(companions).forEach(g => {
+    JSON.parse(companions).forEach((g) => {
       Glyphs.addToInventory(g);
     });
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
     ADNotations.Settings.exponentCommas.min = 10 ** player.options.notationDigits.comma;
     ADNotations.Settings.exponentCommas.max = 10 ** player.options.notationDigits.notation;
     player.lastUpdate = Date.now();
-  }
+  },
 };

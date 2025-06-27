@@ -325,5 +325,5 @@ const Guard = {
     if (value instanceof TimeSpan) return;
     if (message) throw message;
     throw "Value is not a TimeSpan";
-  }
+  },
 };

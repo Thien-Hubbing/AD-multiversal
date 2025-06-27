@@ -68,7 +68,7 @@ export const GameStorage = {
   saves: {
     0: undefined,
     1: undefined,
-    2: undefined
+    2: undefined,
   },
   saved: 0,
   lastSaveTime: Date.now(),
@@ -120,7 +120,7 @@ export const GameStorage = {
       this.saves = {
         0: root,
         1: undefined,
-        2: undefined
+        2: undefined,
       };
       this.currentSlot = 0;
       this.loadPlayerObject(root);
@@ -208,7 +208,7 @@ export const GameStorage = {
     if (save.money === undefined && save.antimatter === undefined) return "Save does not have antimatter property";
 
     if (save.version === undefined || save.version < 25) {
-      return "Save is from an earlier version of AD. Import to vanilla first."
+      return "Save is from an earlier version of AD. Import to vanilla first.";
     }
 
     // Recursively check for any NaN props and add any we find to an array
@@ -219,21 +219,24 @@ export const GameStorage = {
         const prop = obj[key];
         let thisNaN;
         switch (typeof prop) {
-          case "object":
+          case "object": {
             thisNaN = checkNaN(prop, `${path}.${key}`);
             hasNaN = hasNaN || thisNaN;
             break;
-          case "number":
+          }
+          case "number": {
             thisNaN = Number.isNaN(prop);
             hasNaN = hasNaN || thisNaN;
             if (thisNaN) invalidProps.push(`${path}.${key}`);
             break;
-          case "string":
+          }
+          case "string": {
             // If we're attempting to import, all NaN entries will still be strings
             thisNaN = prop === "NaN";
             hasNaN = hasNaN || thisNaN;
             if (thisNaN) invalidProps.push(`${path}.${key}`);
             break;
+          }
         }
       }
       return hasNaN;
@@ -249,22 +252,27 @@ export const GameStorage = {
   canSave(ignoreSimulation = false) {
     const isSelectingGlyph = GlyphSelection.active;
     const isSimulating = ui.$viewModel.modal.progressBar !== undefined && !ignoreSimulation;
-    const isEnd = (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED && !GameEnd.removeAdditionalEnd) ||
-      GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
+    const isEnd = (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED && !GameEnd.removeAdditionalEnd)
+      || GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
     return !isEnd && !(isSelectingGlyph || isSimulating);
   },
 
-  save(silent = true, manual = false) {
+  save(silent = false, manual = false) {
     if (!this.canSave()) return;
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();
     if (manual && ++this.saved > 99) SecretAchievement(12).unlock();
     const root = {
       current: this.currentSlot,
-      saves: this.saves
+      saves: this.saves,
     };
     localStorage.setItem(this.localStorageKey, GameSaveSerializer.serialize(root));
     if (!silent) GameUI.notify.info("Game saved");
+    if (GameEnd.endState < END_STATE_MARKERS.SAVE_DISABLED && GameEnd.endState > END_STATE_MARKERS.GAME_END
+      && Pelle.isDoomed) {
+      GameUI.notify.strike("You can't save this reality.");
+      player.multiverse.reached = true;
+    }
   },
 
   // Saves a backup, updates save timers (this is called before nextBackup is updated), and then saves the timers too.
@@ -424,14 +432,12 @@ export const GameStorage = {
     Cloud.resetTempState();
   },
 
-  // eslint-disable-next-line complexity
   loadPlayerObject(playerObject) {
     this.saved = 0;
 
     const checkString = this.checkPlayerObject(playerObject);
     if (playerObject === Player.defaultStart || checkString !== "") {
       if (DEV && checkString !== "") {
-        // eslint-disable-next-line no-console
         console.log(`Savefile was invalid and has been reset - ${checkString}`);
       }
       player = deepmergeAll([{}, Player.defaultStart]);
@@ -467,11 +473,11 @@ export const GameStorage = {
       // We do this because the codeis dumb and doesnt redecimalize if we dont for some reason
       // Also, if we do it later i think it fucks up the code down the line somehow
       if (player.version >= 83) {
-        const fixGlyph = glyph => {
+        const fixGlyph = (glyph) => {
           glyph.level = new Decimal(glyph.level);
           glyph.rawLevel = new Decimal(glyph.rawLevel);
           glyph.strength = new Decimal(glyph.strength);
-          // eslint-disable-next-line consistent-return
+
           return glyph;
         };
         player.celestials.teresa.bestAMSet = player.celestials.teresa.bestAMSet.map(n => fixGlyph(n));
@@ -490,7 +496,7 @@ export const GameStorage = {
       }
       for (const item in player.reality.glyphs.filter.types) {
         player.reality.glyphs.filter.types[item].rarity = new Decimal(player.reality.glyphs.filter.types[item].rarity);
-        // eslint-disable-next-line max-len
+
         // Eplayer.reality.glyphs.filter.types[item].score = new Decimal(player.reality.glyphs.filter.types[item].score);
       }
 
@@ -582,7 +588,7 @@ export const GameStorage = {
     for (const resource of AlchemyResources.all) {
       resource.before = resource.amount;
     }
-  }
+  },
 };
 
 function download(filename, text) {

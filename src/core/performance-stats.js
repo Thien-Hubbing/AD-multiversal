@@ -1,5 +1,5 @@
 export const PerformanceStats = {
-  container: document.getElementById("performance-stats"),
+  container: document.querySelector("#performance-stats"),
   samplePeriod: 10 * 1000,
   isOn: false,
   currentBlocks: [],
@@ -24,7 +24,7 @@ export const PerformanceStats = {
     if (block === undefined) {
       block = {
         records: [],
-        childBlocks: {}
+        childBlocks: {},
       };
       blockRoot[blockName] = block;
     }
@@ -81,5 +81,5 @@ export const PerformanceStats = {
     }
     render(this.stats);
     this.container.innerHTML = text;
-  }
+  },
 };
