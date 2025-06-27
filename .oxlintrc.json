@@ -1,0 +1,98 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/refs/heads/main/npm/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "pedantic": "error",
+    "perf": "warn"
+  },
+  "plugins": [
+    "typescript",
+    "unicorn",
+    "oxc",
+    "import",
+    "promise",
+    "node",
+    "jsx-a11y"
+  ],
+  "env": {
+    "builtin": true,
+    "node": true,
+    "browser": true,
+    "es2022": true
+  },
+  "rules": {
+    "eslint/max-depth": ["warn", 4],
+    "eslint/max-lines-per-function": ["warn", 250],
+    "eslint/eqeqeq": "error",
+    "eslint/no-var": "error",
+    "eslint/max-nested-callbacks": ["warn", 3],
+    "eslint/max-lines": ["warn", 1000],
+    "eslint/func-style": "off",
+    "eslint/no-magic-numbers": "off",
+    "eslint/no-ternary": "off",
+    "eslint/no-nested-ternary": "error",
+    "eslint/no-unused-vars": "error",
+    "eslint/max-classes-per-file": "off",
+    "eslint/no-empty": "error",
+    "eslint/no-empty-function": "error",
+    "eslint/no-eq-null": "error",
+    "eslint/no-unused-expressions": "error",
+    "eslint/default-case-last": "warn",
+    "eslint/default-param-last": "error",
+    "eslint/grouped-accessor-pairs": "error",
+    "eslint/guard-for-in": "error",
+    "eslint/no-duplicate-imports": "error",
+    "eslint/no-multi-assign": "error",
+    "eslint/operator-assignment": "error",
+    "eslint/prefer-object-spread": "error",
+    "eslint/getter-return": "error",
+    "eslint/no-unreachable": "error",
+    "typescript/consistent-type-definitions": "error",
+    "typescript/consistent-type-imports": "error",
+    "typescript/no-empty-interface": "error",
+    "typescript/no-inferrable-types": "warn",
+    "typescript/prefer-for-of": "error",
+    "typescript/prefer-function-type": "error",
+    "typescript/no-unused-vars": "error",
+    "typescript/no-dynamic-delete": "error",
+    "typescript/prefer-literal-enum-member": "error",
+    "typescript/adjacent-overload-signatures": "error",
+    "typescript/consistent-generic-constructors": "error",
+    "unicorn/empty-brace-spaces": "error",
+    "unicorn/error-message": "error",
+    "unicorn/no-unreadable-array-destructuring": "error",
+    "unicorn/no-zero-fractions": "error",
+    "unicorn/number-literal-case": "error",
+    "unicorn/prefer-array-flat-map": "error",
+    "unicorn/prefer-includes": "error",
+    "unicorn/prefer-negative-index": "error",
+    "unicorn/prefer-optional-catch-binding": "error",
+    "unicorn/prefer-spread": "warn",
+    "unicorn/prefer-structured-clone": "error",
+    "unicorn/require-array-join-separator": "error",
+    "unicorn/switch-case-braces": "error",
+    "unicorn/filename-case": ["warn", {
+      "case": "kebab-case"
+    }],
+    "unicorn/no-new-array": "off",
+    "import/no-cycle": "error",
+    "import/no-dynamic-require": "error",
+    "import/unambiguous": "error",
+    "import/consistent-type-specifier-style": ["error", "prefer-inline"],
+    "import/first": "error",
+    "oxc/no-const-enum": "error",
+    "oxc/no-map-spread": "error",
+    "oxc/bad-bitwise-operator": "error",
+    "promise/no-nesting": "error",
+    "promise/no-return-in-finally": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.vue"],
+      "rules": {
+        "unicorn/filename-case": "off"
+      }
+    }
+  ]
+}
