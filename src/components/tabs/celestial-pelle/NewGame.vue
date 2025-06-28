@@ -27,6 +27,9 @@ export default {
     startNewGame() {
       NG.startNewGame();
     },
+    multiverseReset() {
+      multiverseReset(false, true);
+    },
     openSelectionModal() {
       Modal.cosmeticSetChoice.show();
     }
@@ -50,6 +53,17 @@ export default {
         @click="startNewGame"
       >
         Start over?
+      </button>
+    </div>
+    <h2>
+      You can also start from a different multiverse instead of this one.
+    </h2>
+    <div class="c-new-game-button-container">
+      <button
+        class="c-new-game-button"
+        @click="multiverseReset"
+      >
+        Swap to a new multiverse
       </button>
     </div>
     <br>

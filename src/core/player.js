@@ -266,6 +266,7 @@ window.player = {
       maxGlyphs: 0,
       slowestBH: DC.D1,
     },
+    multiverse: {},
     permanent: {
       emojiGalaxies: DC.D0,
       singleTickspeed: 0,
@@ -288,6 +289,8 @@ window.player = {
       [Number.MAX_VALUE, DC.BEMAX, DC.BEMAX, DC.D1, DC.D1, "", DC.D0]),
     recentRealities: Array.range(0, 10).map(() =>
       [Number.MAX_VALUE, DC.BEMAX, DC.BEMAX, DC.D1, DC.D1, "", DC.D0, DC.D0]),
+    recentMultiverses: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, DC.BEMAX, DC.BEMAX, DC.D1, DC.D1, "", DC.D0]),
     thisInfinity: {
       time: DC.D0,
       realTime: DC.D0,
@@ -350,6 +353,16 @@ window.player = {
       speedSet: [],
       iMCapSet: [],
       laitelaSet: [],
+    },
+    thisMultiverse: {
+      time: DC.D0,
+      realTime: DC.D0,
+      trueTime: 0,
+    },
+    bestMultiverse: {
+      time: DC.BEMAX,
+      realTime: DC.BEMAX,
+      trueTime: 0,
     },
   },
   speedrun: {
@@ -929,7 +942,9 @@ window.player = {
   },
   multiverse: {
     reached: false,
+    times: DC.D0,
     godParticles: DC.D0,
+    cherenkov: DC.D0,
   },
 };
 
@@ -1007,6 +1022,10 @@ export const Player = {
     const glyphCount = player.requirementChecks.reality.maxGlyphs;
     // This switch case intentionally falls through because every lower layer should be reset as well
     switch (key) {
+      case "multiverse": {
+        player.requirementChecks.multiverse = {};
+      }
+      // oxlint-disable-next-line no-fallthrough
       case "reality": {
         player.requirementChecks.reality = {
           noAM: true,
@@ -1027,6 +1046,7 @@ export const Player = {
         };
       }
 
+      // oxlint-disable-next-line no-fallthrough
       case "eternity": {
         player.requirementChecks.eternity = {
           onlyAD1: true,
@@ -1036,6 +1056,7 @@ export const Player = {
         };
       }
 
+      // oxlint-disable-next-line no-fallthrough
       case "infinity": {
         player.requirementChecks.infinity = {
           maxAll: false,
